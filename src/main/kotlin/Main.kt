@@ -1,7 +1,9 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import java.io.File
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+fun main(args: Array<String>) {
+    val fileName = args.getOrNull(0) ?: return
+    val code = File(fileName).readText()
+    Lexer(code).scanTokens().forEach {
+        println(it)
+    }
 }
