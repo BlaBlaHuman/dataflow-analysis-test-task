@@ -1,8 +1,8 @@
-class Token(private val type: TokenType,
-            private val lexeme: String,
-            private val literal: String?,
-            private val line: Int) {
+class Token(val type: TokenType,
+            val lexeme: String,
+            val literal: String?,
+            val line: Int) {
     override fun toString(): String {
-        return "$line: $type $lexeme $literal"
+        return "Line $line: (type $type, lexeme $lexeme, literal $literal)"
     }
 }
