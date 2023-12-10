@@ -1,9 +1,14 @@
 abstract class Expr {
     abstract fun <R> accept(exprVisitor: ExprVisitor<R>): R
+    abstract fun getIds(): Set<Variable>
 
     class Binary (val left: Expr, val operator: Token, val right: Expr) : Expr() {
         override fun <R> accept(exprVisitor: ExprVisitor<R>): R {
             return exprVisitor.visitBinary(this)
+        }
+
+        override fun getIds(): Set<Variable> {
+            return left.getIds() + right.getIds()
         }
 
     }
@@ -11,11 +16,19 @@ abstract class Expr {
         override fun <R> accept(exprVisitor: ExprVisitor<R>): R {
             return exprVisitor.visitGrouping(this)
         }
+
+        override fun getIds(): Set<Variable> {
+            return expr.getIds()
+        }
     }
 
     class Literal (val value: String) : Expr() {
         override fun <R> accept(exprVisitor: ExprVisitor<R>): R {
             return exprVisitor.visitLiteral(this)
+        }
+
+        override fun getIds(): Set<Variable> {
+            return mutableSetOf()
         }
     }
 
@@ -23,11 +36,19 @@ abstract class Expr {
         override fun <R> accept(exprVisitor: ExprVisitor<R>): R {
             return exprVisitor.visitUnary(this)
         }
+
+        override fun getIds(): Set<Variable> {
+            return expr.getIds()
+        }
     }
 
     class Variable (val name: Token): Expr() {
         override fun <R> accept(exprVisitor: ExprVisitor<R>): R {
             return exprVisitor.visitVariable(this)
+        }
+
+        override fun getIds(): Set<Variable> {
+            return mutableSetOf(this)
         }
 
     }
