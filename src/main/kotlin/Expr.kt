@@ -42,13 +42,21 @@ abstract class Expr {
         }
     }
 
-    class Variable (val name: Token): Expr() {
+    class Variable (val id: Token): Expr() {
         override fun <R> accept(exprVisitor: ExprVisitor<R>): R {
             return exprVisitor.visitVariable(this)
         }
 
         override fun getIds(): Set<Variable> {
             return mutableSetOf(this)
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return other is Variable && id.lexeme == other.id.lexeme
+        }
+
+        override fun hashCode(): Int {
+            return id.lexeme.hashCode()
         }
 
     }

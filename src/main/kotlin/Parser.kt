@@ -48,7 +48,7 @@ class Parser(private val tokens: List<Token>) {
     private fun declarationStatement(): Stmt {
         val name = consume(TokenType.IDENTIFIER, "Expected variable name.")
         if (match(TokenType.EQUAL)) {
-            return Stmt.Declaration(name, expression())
+            return Stmt.Declaration(Expr.Variable(name), expression())
         }
         throw error(peek(), "Expected equal sign")
     }

@@ -1,7 +1,7 @@
 abstract class Stmt {
     abstract fun <R> accept(stmtVisitor: StmtVisitor<R>): R
 
-    class Declaration(val name: Token, val expr: Expr): Stmt() {
+    class Declaration(val name: Expr.Variable, val expr: Expr): Stmt() {
         override fun <R> accept(stmtVisitor: StmtVisitor<R>): R {
             return stmtVisitor.visitDecl(this)
         }

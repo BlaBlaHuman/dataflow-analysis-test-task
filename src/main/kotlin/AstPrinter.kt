@@ -24,7 +24,7 @@ class AstPrinter(private val tabSize: Int): ExprVisitor<String>, StmtVisitor<Str
     }
 
     override fun visitVariable(expr: Expr.Variable): String {
-        return expr.name.lexeme
+        return expr.id.lexeme
     }
 
     override fun visitIf(stmt: Stmt.If): String {
@@ -38,7 +38,7 @@ class AstPrinter(private val tabSize: Int): ExprVisitor<String>, StmtVisitor<Str
     }
 
     override fun visitDecl(stmt: Stmt.Declaration): String {
-        return "decl ${stmt.name.lexeme} ${this.printExpr(stmt.expr)}"
+        return "decl ${stmt.name.id.lexeme} ${this.printExpr(stmt.expr)}"
     }
 
     override fun visitStmtList(stmt: Stmt.StmtList): String {
