@@ -1,39 +1,47 @@
-class CfgGenerator: StmtVisitor<Pair<MutableSet<CfgNode>, MutableSet<CfgNode>>> {
-    fun generateCfg(ast: Stmt.StmtList): Pair<MutableSet<CfgNode>, MutableSet<CfgNode>> {
+class CfgGenerator: StmtVisitor<ProgramCfg> {
+    fun generateCfg(ast: Stmt.StmtList): ProgramCfg {
         return ast.accept(this)
     }
 
-    override fun visitIf(stmt: Stmt.If): Pair<MutableSet<CfgNode>, MutableSet<CfgNode>> {
-        val firstNode = CfgNode(stmt)
+    override fun visitIf(stmt: Stmt.If): ProgramCfg {
+        val mainNode = CfgNode(stmt)
         val body = stmt.thenBranch.accept(this)
-        firstNode.succ.addAll(body.first)
-        body.first.forEach { it.pred.add(firstNode) }
-        return Pair(mutableSetOf(firstNode), (body.second + firstNode).toMutableSet())
+        addSucc(setOf(mainNode), body.entryNodes)
+        addPred(body.entryNodes, setOf(mainNode))
+        return ProgramCfg(mutableSetOf(mainNode), (body.exitNodes + mainNode).toMutableSet())
     }
 
-    override fun visitWhile(stmt: Stmt.While): Pair<MutableSet<CfgNode>, MutableSet<CfgNode>> {
-        val firstNode = CfgNode(stmt)
+    override fun visitWhile(stmt: Stmt.While): ProgramCfg {
+        val mainNode = CfgNode(stmt)
         val body = stmt.body.accept(this)
-        firstNode.succ.addAll(body.first)
-        body.first.forEach { it.pred.add(firstNode) }
-        body.second.forEach { it.succ.add(firstNode) }
-        return Pair(mutableSetOf(firstNode), mutableSetOf(firstNode))
+        addSucc(setOf(mainNode), body.entryNodes)
+        addPred(body.entryNodes, setOf(mainNode))
+        addSucc(body.exitNodes, setOf(mainNode))
+        return ProgramCfg(mutableSetOf(mainNode), mutableSetOf(mainNode))
     }
 
-    override fun visitDecl(stmt: Stmt.Declaration): Pair<MutableSet<CfgNode>, MutableSet<CfgNode>> {
+    override fun visitDecl(stmt: Stmt.Declaration): ProgramCfg {
         val newNode = CfgNode(stmt)
-        return Pair(mutableSetOf(newNode), mutableSetOf(newNode))
+        return ProgramCfg(mutableSetOf(newNode), mutableSetOf(newNode))
     }
 
-    override fun visitStmtList(stmt: Stmt.StmtList): Pair<MutableSet<CfgNode>, MutableSet<CfgNode>> {
+    override fun visitStmtList(stmt: Stmt.StmtList): ProgramCfg {
         val root = stmt.stmts.first().accept(this)
-        var prev = root
-        for (idx in 1..stmt.stmts.lastIndex) {
-            val tmp = stmt.stmts[idx].accept(this)
-            prev.second.forEach { it.succ.addAll(tmp.first) }
-            tmp.first.forEach { it.pred.addAll(prev.second) }
-            prev = tmp
+        var lastNode = root
+        stmt.stmts.drop(1).forEach { node ->
+            val currNode = node.accept(this)
+            addSucc(lastNode.exitNodes, currNode.entryNodes)
+            addPred(currNode.entryNodes, lastNode.exitNodes)
+            lastNode = currNode
         }
-        return Pair(root.first, prev.second)
+        return ProgramCfg(root.entryNodes, lastNode.exitNodes)
+    }
+
+    private fun addSucc(nodes: Set<CfgNode>, succ: Set<CfgNode>) {
+        nodes.forEach { it.succ.addAll(succ) }
+    }
+
+    private fun addPred(nodes: Set<CfgNode>, pred: Set<CfgNode>) {
+        nodes.forEach { it.pred.addAll(pred) }
     }
 }

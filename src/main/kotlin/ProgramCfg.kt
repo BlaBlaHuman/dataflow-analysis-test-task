@@ -1,6 +1,6 @@
-class ProgramCfg(val entryNodes: Set<CfgNode>, val exitNodes: Set<CfgNode>) {
-    val allNodes: Set<CfgNode>
-    init {
+class ProgramCfg(val entryNodes: MutableSet<CfgNode>, val exitNodes: MutableSet<CfgNode>) {
+
+    fun getNodes(): Set<CfgNode> {
         fun visitNodes(n: CfgNode, visited: MutableSet<CfgNode> = mutableSetOf()): MutableSet<CfgNode>  {
             if (!visited.contains(n)) {
                 visited += n
@@ -11,7 +11,7 @@ class ProgramCfg(val entryNodes: Set<CfgNode>, val exitNodes: Set<CfgNode>) {
             return visited
         }
 
-        allNodes = entryNodes.flatMap {
+        return entryNodes.flatMap {
             visitNodes(it)
         }.toSet()
     }
