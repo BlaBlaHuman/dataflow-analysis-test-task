@@ -1,3 +1,5 @@
+package ast
+
 interface StmtVisitor<R> {
     fun visitIf(stmt: Stmt.If): R
     fun visitWhile(stmt: Stmt.While): R

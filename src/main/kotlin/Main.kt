@@ -1,3 +1,9 @@
+import analysis.LiveVarsAnalyzer
+import ast.AstPrinter
+import ast.Stmt
+import cfg.CfgGenerator
+import parser.Lexer
+import parser.Parser
 import java.io.File
 
 fun main(args: Array<String>) {

@@ -1,3 +1,8 @@
+package cfg
+
+import ast.Stmt
+import ast.StmtVisitor
+
 class CfgGenerator: StmtVisitor<ProgramCfg> {
     fun generateCfg(ast: Stmt.StmtList): ProgramCfg {
         return ast.accept(this)

@@ -1,3 +1,5 @@
+package cfg
+
 class ProgramCfg(val entryNodes: MutableSet<CfgNode>, val exitNodes: MutableSet<CfgNode>) {
 
     fun getNodes(): Set<CfgNode> {

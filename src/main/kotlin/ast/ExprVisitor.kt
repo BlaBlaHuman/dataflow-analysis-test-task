@@ -1,3 +1,5 @@
+package ast
+
 interface ExprVisitor<R> {
     fun visitBinary(expr: Expr.Binary): R
     fun visitGrouping(expr: Expr.Grouping): R

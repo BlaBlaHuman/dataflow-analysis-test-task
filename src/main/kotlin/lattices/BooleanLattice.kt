@@ -1,3 +1,5 @@
+package lattices
+
 class BooleanLattice<R>: Lattice<Set<R>> {
     override val bottom: Set<R> = emptySet()
 

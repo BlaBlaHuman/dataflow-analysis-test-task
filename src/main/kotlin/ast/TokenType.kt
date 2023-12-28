@@ -1,3 +1,5 @@
+package ast
+
 enum class TokenType {
     LBRACKET,
     RBRACKET,

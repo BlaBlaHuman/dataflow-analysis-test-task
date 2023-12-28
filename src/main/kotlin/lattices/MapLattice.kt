@@ -1,3 +1,5 @@
+package lattices
+
 class MapLattice<R, L>(val sublattice: Lattice<L>): Lattice<Map<R, L>> {
     override val bottom: Map<R, L> = emptyMap<R, L>().withDefault { sublattice.bottom }
 

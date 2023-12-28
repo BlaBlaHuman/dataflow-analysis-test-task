@@ -1,3 +1,10 @@
+package parser
+
+import ast.Expr
+import ast.Stmt
+import ast.TokenType
+import ast.Token
+
 class Parser(private val tokens: List<Token>) {
     private var current: Int = 0
 

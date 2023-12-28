@@ -1,3 +1,5 @@
+package ast
+
 abstract class Stmt {
     abstract fun <R> accept(stmtVisitor: StmtVisitor<R>): R
 

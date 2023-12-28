@@ -1,3 +1,5 @@
+package lattices
+
 interface Lattice<R> {
     val bottom: R
 

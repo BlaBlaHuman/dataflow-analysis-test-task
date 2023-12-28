@@ -1,3 +1,12 @@
+package analysis
+
+import cfg.CfgNode
+import ast.Expr
+import cfg.ProgramCfg
+import ast.Stmt
+import lattices.BooleanLattice
+import lattices.MapLattice
+
 class LiveVarsAnalyzer(programCfg: ProgramCfg) {
     private val lattice = MapLattice<CfgNode, Set<Expr.Variable>>(BooleanLattice())
     private val cfgNodes = programCfg.getNodes()
