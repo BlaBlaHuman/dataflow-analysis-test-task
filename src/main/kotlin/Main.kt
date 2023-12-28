@@ -27,19 +27,19 @@ class GenerateAST: CliktCommand(name = "ast", help = "Generate and print AST for
     private val config by requireObject<Map<String, Any>>()
     override fun run() {
         val programAst = config["AST"] as Stmt.StmtList
-        val astPrinter = AstPrinter(5)
-        echo(astPrinter.printStmt(programAst))
+        echo("ABSTRACT SYNTAX TREE:")
+        echo(AstPrinter(5).printStmt(programAst))
     }
 }
 
 class UnusedAssignmentsAnalysis: CliktCommand(name = "lva", help = "Analyze unused assignments using live variables analysis") {
     private val config by requireObject<Map<String, Any>>()
-
     override fun run() {
         val programAst = config["AST"] as Stmt.StmtList
+        echo("UNUSED ASSIGNMENTS:")
         val printer = AstPrinter()
         LiveVarsAnalyzer(CfgGenerator().generateCfg(programAst)).getUnusedAssignments().forEach {
-            println(printer.visitDecl(it.data as Stmt.Declaration))
+            echo(printer.visitDecl(it.data as Stmt.Declaration))
         }
     }
 }
