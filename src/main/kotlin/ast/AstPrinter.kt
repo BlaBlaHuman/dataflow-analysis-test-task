@@ -1,6 +1,6 @@
 package ast
 
-class AstPrinter(private val tabSize: Int): ExprVisitor<String>, StmtVisitor<String> {
+class AstPrinter(private val tabSize: Int = 1): ExprVisitor<String>, StmtVisitor<String> {
     private fun printExpr(expr: Expr): String {
         return expr.accept(this)
     }
